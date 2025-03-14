@@ -6,22 +6,17 @@ import { Pagination } from './components/Pagination';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const items = getNumbers(1, 42).map(n => `Item ${n}`);
 
-enum ItemsPerPageSelector {
-  THREE = 3,
-  FIVE = 5,
-  TEN = 10,
-  TWENTY = 20,
-}
+const ItemsPerPageSelector: number[] = [3, 5, 10, 20];
 
-interface Queries {
+interface PaginationOptions {
   itemsPerPage: number;
-  currPage: ItemsPerPageSelector;
+  currPage: number;
 }
 
 const getCurrentItems = (
   totalItems: string[],
-  { itemsPerPage, currPage }: Queries,
-) => {
+  { itemsPerPage, currPage }: PaginationOptions,
+): string[] => {
   return totalItems.slice(
     (currPage - 1) * itemsPerPage,
     currPage * itemsPerPage,
@@ -30,16 +25,18 @@ const getCurrentItems = (
 
 export const App: React.FC = () => {
   const [currPage, setCurrPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(ItemsPerPageSelector.FIVE);
+  const [itemsPerPage, setItemsPerPage] = useState(ItemsPerPageSelector[1]);
 
   const currItems = getCurrentItems(items, { itemsPerPage, currPage });
+  const currentFirstItem = items.indexOf(currItems[0]) + 1;
+  const currentLastItem = items.indexOf(currItems[currItems.length - 1]) + 1;
 
   return (
     <div className="container">
       <h1>Items with Pagination</h1>
 
       <p className="lead" data-cy="info">
-        {`Page ${currPage} (items ${items.indexOf(currItems[0]) + 1} - ${items.indexOf(currItems[currItems.length - 1]) + 1} of ${items.length})`}
+        {`Page ${currPage} (items ${currentFirstItem} - ${currentLastItem} of ${items.length})`}
       </p>
 
       <div className="form-group row">
@@ -54,18 +51,13 @@ export const App: React.FC = () => {
               setItemsPerPage(+event.target.value);
             }}
           >
-            <option value={ItemsPerPageSelector.THREE}>
-              {ItemsPerPageSelector.THREE}
-            </option>
-            <option value={ItemsPerPageSelector.FIVE}>
-              {ItemsPerPageSelector.FIVE}
-            </option>
-            <option value={ItemsPerPageSelector.TEN}>
-              {ItemsPerPageSelector.TEN}
-            </option>
-            <option value={ItemsPerPageSelector.TWENTY}>
-              {ItemsPerPageSelector.TWENTY}
-            </option>
+            {ItemsPerPageSelector.map(item => {
+              return (
+                <option value={item} key={item}>
+                  {item}
+                </option>
+              );
+            })}
           </select>
         </div>
 
