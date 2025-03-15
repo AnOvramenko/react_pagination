@@ -17,10 +17,10 @@ const getCurrentItems = (
   totalItems: string[],
   { itemsPerPage, currPage }: PaginationOptions,
 ): string[] => {
-  return totalItems.slice(
-    (currPage - 1) * itemsPerPage,
-    currPage * itemsPerPage,
-  );
+  const getCurrItemsFirstIndex = (currPage - 1) * itemsPerPage;
+  const getCurrItemsLastIndex = currPage * itemsPerPage;
+
+  return totalItems.slice(getCurrItemsFirstIndex, getCurrItemsLastIndex);
 };
 
 export const App: React.FC = () => {

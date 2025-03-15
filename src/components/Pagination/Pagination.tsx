@@ -23,7 +23,7 @@ export const Pagination: React.FC<Props> = ({
     <ul className="pagination">
       <li
         className={cn('page-item active', {
-          disabled: currentPage === 1,
+          disabled: isFirstPage,
         })}
       >
         <a
@@ -61,7 +61,7 @@ export const Pagination: React.FC<Props> = ({
 
       <li
         className={cn('page-item active', {
-          disabled: currentPage === totalPages.length,
+          disabled: isLastPage,
         })}
       >
         <a
